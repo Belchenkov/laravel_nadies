@@ -5,6 +5,6 @@
 @section('content')
     <h1>Categories</h1>
     <category-manager
-        :categories="{{ $categories }}"
+        :initial-categories="{{ $categories }}"
     ></category-manager>
 @endsection
