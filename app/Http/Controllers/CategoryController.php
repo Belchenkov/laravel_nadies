@@ -23,6 +23,22 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function upsert(Request $request)
+    {
+        $this->authorize('manage', 'App\Category');
+
+        $categories = $request->post('categories');
+        foreach ($categories as $cat) {
+            if ($cat['id']) {
+                Category::where('id', $cat['id'])->update($cat);
+            } else {
+                Category::create($cat);
+            }
+        }
+
+        return ['success', true, 'categories' => Category::all()];
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -82,10 +98,12 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)
     {
-        //
+        $this->authorize('delete', $category);
+        $category->delete();
+
+        return ['success' => true];
     }
 }

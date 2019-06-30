@@ -1,11 +1,11 @@
 <template>
-    <form>
+    <form @submit.prevent="saveCategories">
         <a
             href="#"
             @click="addCategory"
             class="add"
         >+ Add Category</a>
-        <div v-for="category in categories" :key="category.id">
+        <div v-for="(category, index) in categories" :key="category.id">
             <input
                 type="text"
                 v-model="category.name"
@@ -14,7 +14,7 @@
             <input type="number" v-model="category.display_order">
             <a
                 href="#"
-                @click="removeCategory(category.id)"
+                @click="removeCategory(index)"
                 class="remove"
             >delete</a>
             <div>
@@ -29,6 +29,8 @@
             </div>
             <hr>
         </div>
+        <button type="submit">Save</button>
+        <div>{{ feedback }}</div>
     </form>
 </template>
 
@@ -39,7 +41,8 @@
         ],
         data() {
             return {
-                categories: _.cloneDeep(this.initialCategories)
+                categories: _.cloneDeep(this.initialCategories),
+                feedback: ''
             }
         },
         methods: {
@@ -57,8 +60,26 @@
             },
             removeCategory(index) {
                 if (confirm('Are you sure?')) {
+                    console.log(index);
+                    let id = this.categories[index].id;
+
+                    if (id > 0) {
+                        axios.delete('/api/categories/' + id);
+                    }
+
                     this.categories.splice(index, 1);
                 }
+            },
+            saveCategories() {
+                axios.post('/api/categories/upsert', {
+                   categories: this.categories
+                })
+                    .then((res) => {
+                        if (res.data.success) {
+                            this.feedback = 'Changes saved.';
+                            this.categories = res.data.categories;
+                        }
+                    });
             }
         }
     }
