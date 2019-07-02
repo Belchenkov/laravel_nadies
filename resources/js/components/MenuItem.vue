@@ -1,0 +1,17 @@
+<template>
+    <form>
+        Add/Edit item
+    </form>
+</template>
+
+<script>
+
+    export default {
+        name: "MenuItem",
+
+    }
+</script>
+
+<style scoped>
+
+</style>
