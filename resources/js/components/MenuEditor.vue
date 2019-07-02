@@ -1,7 +1,11 @@
 <template>
     <div>
         <h1>Menu Editor</h1>
-        <router-view></router-view>
+        <router-link :to="{name: 'categories'}">Categories</router-link>
+        <router-link :to="{name: 'add-item'}">Add Item</router-link>
+        <router-view
+            :initial-categories="categories"
+        ></router-view>
     </div>
 </template>
 
@@ -14,6 +18,9 @@
     import MenuItem from './MenuItem.vue';
 
     export default {
+        props: [
+            'categories'
+        ],
         name: "MenuEditor",
         router: new VueRouter({
             routes: [
@@ -37,5 +44,14 @@
 </script>
 
 <style scoped>
+    a {
+        border: solid 1px black;
+        padding: 10px;
+        margin: 0;
+    }
 
+    .router-link-active {
+        font-weight: bold;
+        border-bottom: none;
+    }
 </style>
