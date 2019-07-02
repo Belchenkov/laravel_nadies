@@ -23,6 +23,8 @@
         ],
         name: "MenuEditor",
         router: new VueRouter({
+            mode: 'history',
+            base: 'menu-editor',
             routes: [
                 {
                     path: '/categories',
@@ -37,6 +39,10 @@
                 {
                     path: '/',
                     redirect: { name: 'categories' }
+                },
+                {
+                    path: '*',
+                    redirect: '/'
                 },
             ]
         })
