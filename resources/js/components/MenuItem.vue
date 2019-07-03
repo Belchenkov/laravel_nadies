@@ -1,5 +1,5 @@
 <template>
-    <form class="item-form" @submit.prevent="save">
+    <form class="item-form" @submit.prevent="save" novalidate>
         <div>
             <input type="text" placeholder="Item name" v-model="item.name" required>
             $<input type="number" min="0" step=".01" v-model="item.price" required>
@@ -37,7 +37,14 @@
         },
         methods: {
             save() {
-
+                axios.post('/api/menu-items/add', this.item)
+                    .then(res => {
+                        this.$router.push('/');
+                    })
+                    .catch(error => {
+                        let messages = Object.values(error.response.data.errors);
+                        this.errors = [].concat.apply([], messages);
+                    });
             }
         }
     }
