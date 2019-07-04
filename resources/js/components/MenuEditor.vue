@@ -2,6 +2,7 @@
     <div>
         <h1>Menu Editor</h1>
         <router-link :to="{name: 'categories'}">Categories</router-link>
+        <router-link :to="{name: 'items'}">Items</router-link>
         <router-link :to="{name: 'add-item'}">Add Item</router-link>
         <router-view
             :initial-categories="categories"
@@ -16,6 +17,7 @@
 
     import CategoryManager from './CategoryManager.vue';
     import MenuItem from './MenuItem.vue';
+    import MenuItemList from './MenuItemList.vue';
 
     export default {
         props: [
@@ -32,9 +34,20 @@
                     component: CategoryManager
                 },
                 {
+                    path: '/items',
+                    name: 'items',
+                    component: MenuItemList
+                },
+                {
                     path: '/add-item',
                     name: 'add-item',
                     component: MenuItem
+                },
+                {
+                    path: '/edit-item/:id',
+                    name: 'edit-item',
+                    component: MenuItem,
+                    props: true
                 },
                 {
                     path: '/',
