@@ -1,5 +1,6 @@
 <?php
 
+use App\MenuItem;
 use Illuminate\Http\Request;
 
 /*
@@ -17,6 +18,9 @@ Route::post('/categories/upsert', 'CategoryController@upsert');
 Route::delete('/categories/{category}', 'CategoryController@destroy');
 
 Route::post('/menu-items/add', 'MenuItemController@store');
+Route::get('/menu-items/{menuItem}', function (MenuItem $menuItem) {
+    return $menuItem;
+});
 
 Route::post('/add-image', function (Request $request) {
     $file = $request->file('file');
