@@ -22,6 +22,8 @@ Route::get('/menu-items/{menuItem}', function (MenuItem $menuItem) {
     return $menuItem;
 });
 
+Route::post('/menu-items/{menuItem}', 'MenuItemController@update');
+
 Route::post('/add-image', function (Request $request) {
     $file = $request->file('file');
     $dir = 'public/images';
