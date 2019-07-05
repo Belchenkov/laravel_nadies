@@ -34,6 +34,16 @@
     import vue2Dropzone from 'vue2-dropzone';
     import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 
+    function newItem() {
+        return {
+            name: '',
+            price: 0.00,
+            image: '',
+            category_id: '',
+            description: ''
+        };
+    }
+
     export default {
         components: {
             dropZone: vue2Dropzone
@@ -54,13 +64,7 @@
                         file.filename = res;
                     }
                 },
-                item: {
-                    name: '',
-                    price: 0.00,
-                    image: '',
-                    category_id: '',
-                    description: ''
-                },
+                item: newItem(),
                 errors: []
             };
         },
@@ -70,6 +74,10 @@
                     .then(res => this.item = res.data)
                     .catch(err => console.log(err));
             }
+        },
+        beforeRouteLeave (to, from, next) {
+            this.item = newItem();
+            next();
         },
         methods: {
             save() {
