@@ -1733,6 +1733,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1748,7 +1757,7 @@ __webpack_require__.r(__webpack_exports__);
     addCategory: function addCategory() {
       var _this = this;
 
-      this.categories.push({
+      this.$store.commit('ADD_CATEGORY', {
         id: 0,
         name: '',
         image: '',
@@ -1758,6 +1767,13 @@ __webpack_require__.r(__webpack_exports__);
         window.scrollTo(0, document.body.scrollHeight);
 
         _this.$refs[''][0].focus();
+      });
+    },
+    update: function update($event, property, index) {
+      this.$store.commit('UPDATE_CATEGORY', {
+        index: index,
+        property: property,
+        value: $event.target.value
       });
     },
     removeCategory: function removeCategory(index) {
@@ -38067,45 +38083,23 @@ var render = function() {
       _vm._l(_vm.categories, function(category, index) {
         return _c("div", { key: category.id }, [
           _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: category.name,
-                expression: "category.name"
-              }
-            ],
             ref: category.name,
             refInFor: true,
             attrs: { type: "text" },
             domProps: { value: category.name },
             on: {
               input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(category, "name", $event.target.value)
+                return _vm.update($event, "name", index)
               }
             }
           }),
           _vm._v(" "),
           _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: category.display_order,
-                expression: "category.display_order"
-              }
-            ],
             attrs: { type: "number" },
             domProps: { value: category.display_order },
             on: {
               input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(category, "display_order", $event.target.value)
+                return _vm.update($event, "display_order", index)
               }
             }
           }),
@@ -38136,20 +38130,11 @@ var render = function() {
               : _c("label", [_vm._v("Image:")]),
             _vm._v(" "),
             _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.lazy",
-                  value: category.image,
-                  expression: "category.image",
-                  modifiers: { lazy: true }
-                }
-              ],
               attrs: { type: "text" },
               domProps: { value: category.image },
               on: {
                 change: function($event) {
-                  return _vm.$set(category, "image", $event.target.value)
+                  return _vm.update($event, "image", index)
                 }
               }
             })
@@ -54802,6 +54787,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     ADD_CATEGORY: function ADD_CATEGORY(state, category) {
       state.categories.push(category);
+    },
+    UPDATE_CATEGORY: function UPDATE_CATEGORY(state, _ref) {
+      var index = _ref.index,
+          property = _ref.property,
+          value = _ref.value;
+      state.categories[index][property] = value;
     },
     REMOVE_CATEGORY: function REMOVE_CATEGORY(state, index) {
       state.categories.slice(index, 1);

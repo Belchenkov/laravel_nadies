@@ -15,6 +15,9 @@ export default new Vuex.Store({
         ADD_CATEGORY(state, category) {
             state.categories.push(category);
         },
+        UPDATE_CATEGORY(state, { index, property, value }) {
+            state.categories[index][property] = value;
+        },
         REMOVE_CATEGORY(state, index) {
             state.categories.slice(index, 1);
         }
