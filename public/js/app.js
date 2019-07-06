@@ -1743,14 +1743,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      feedback: ''
-    };
-  },
   computed: {
     categories: function categories() {
       return this.$store.state.categories;
+    },
+    feedback: function feedback() {
+      return this.$store.state.feedback;
     }
   },
   methods: {
@@ -1778,27 +1776,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeCategory: function removeCategory(index) {
       if (confirm('Are you sure?')) {
-        console.log(index);
-        var id = this.categories[index].id;
-
-        if (id > 0) {
-          axios["delete"]('/api/categories/' + id);
-        }
-
-        this.categories.splice(index, 1);
+        this.$store.dispatch('removeCategory', index);
       }
     },
     saveCategories: function saveCategories() {
-      var _this2 = this;
-
-      axios.post('/api/categories/upsert', {
-        categories: this.categories
-      }).then(function (res) {
-        if (res.data.success) {
-          _this2.feedback = 'Changes saved.';
-          _this2.categories = res.data.categories;
-        }
-      });
+      this.$store.dispatch('saveCategories');
     }
   }
 });
@@ -54779,11 +54761,15 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     categories: [],
-    items: []
+    items: [],
+    feedback: ''
   },
   mutations: {
     SET_CATEGORIES: function SET_CATEGORIES(state, categories) {
       state.categories = categories;
+    },
+    SET_FEEDBACK: function SET_FEEDBACK(state, feedback) {
+      state.feedback = feedback;
     },
     ADD_CATEGORY: function ADD_CATEGORY(state, category) {
       state.categories.push(category);
@@ -54796,6 +54782,36 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     REMOVE_CATEGORY: function REMOVE_CATEGORY(state, index) {
       state.categories.slice(index, 1);
+    }
+  },
+  actions: {
+    saveCategories: function saveCategories(_ref2) {
+      var commit = _ref2.commit,
+          state = _ref2.state;
+      axios.post('/api/categories/upsert', {
+        categories: state.categories
+      }).then(function (res) {
+        if (res.data.success) {
+          commit('SET_FEEDBACK', 'Changes saved.');
+          setTimeout(function () {
+            return commit('SET_FEEDBACK', '');
+          }, 3000);
+          commit('SET_CATEGORIES', res.data.categories);
+        }
+      });
+    },
+    removeCategories: function removeCategories(_ref3, index) {
+      var commit = _ref3.commit,
+          state = _ref3.state;
+      var id = state.categories[index].id;
+
+      if (id > 0) {
+        axios["delete"]('/api/categories/' + id).then(function (res) {
+          return commit('REMOVE_CATEGORY', index);
+        });
+      }
+
+      commit('REMOVE_CATEGORY', index);
     }
   }
 }));

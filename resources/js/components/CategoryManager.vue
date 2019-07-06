@@ -45,14 +45,12 @@
 
 <script>
     export default {
-        data() {
-            return {
-                feedback: ''
-            }
-        },
         computed: {
             categories() {
                 return this.$store.state.categories;
+            },
+            feedback() {
+                return this.$store.state.feedback;
             }
         },
         methods: {
@@ -77,26 +75,11 @@
             },
             removeCategory(index) {
                 if (confirm('Are you sure?')) {
-                    console.log(index);
-                    let id = this.categories[index].id;
-
-                    if (id > 0) {
-                        axios.delete('/api/categories/' + id);
-                    }
-
-                    this.categories.splice(index, 1);
+                    this.$store.dispatch('removeCategory', index);
                 }
             },
             saveCategories() {
-                axios.post('/api/categories/upsert', {
-                   categories: this.categories
-                })
-                    .then((res) => {
-                        if (res.data.success) {
-                            this.feedback = 'Changes saved.';
-                            this.categories = res.data.categories;
-                        }
-                    });
+                this.$store.dispatch('saveCategories');
             }
         }
     }
